@@ -5,7 +5,19 @@
    "execution_count": 1,
    "id": "40312550",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "ename": "ModuleNotFoundError",
+     "evalue": "No module named 'pandas'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+      "Cell \u001b[0;32mIn[1], line 3\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mjson\u001b[39;00m\n\u001b[1;32m      2\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mos\u001b[39;00m\n\u001b[0;32m----> 3\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mpandas\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m \u001b[38;5;21;01mpd\u001b[39;00m\n\u001b[1;32m      4\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mcsv\u001b[39;00m\n",
+      "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'pandas'"
+     ]
+    }
+   ],
    "source": [
     "import json\n",
     "import os\n",
@@ -721,7 +733,7 @@
    "cell_type": "code",
    "execution_count": 123,
    "id": "5617690c",
-
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -871,7 +883,11 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
+<<<<<<< HEAD:Data Exploration 2.ipynb
+   "version": "3.8.12"
+=======
    "version": "3.8.16"
+>>>>>>> 535924767eccc3d00ec6916f37005fe3a5d05cde:Data Exploration.ipynb
   }
  },
  "nbformat": 4,
