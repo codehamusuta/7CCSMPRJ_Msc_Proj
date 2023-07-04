@@ -107,6 +107,78 @@ class ClimateFeverLoader:
 
         return climate_ds
 
+"""
+Prepare dataset for experiments
+"""
+from datasets import Dataset, DatasetDict, ClassLabel, Value, Features
+from sklearn.model_selection import train_test_split
+
+def load_datasets(fever_dir, pubhealth_dir, climate_dir):
+    """
+    Load and prepare datasets for experiments
+    """
+    #===================================================
+    # Load preprocessed datasets
+    #===================================================
+    fever_train_ds, fever_dev_ds, fever_test_ds = FeverLoader.load(fever_dir)
+    pubhealth_train_ds, pubhealth_dev_ds, pubhealth_test_ds = PubhealthLoader.load(pubhealth_dir)
+    climate_ds = ClimateFeverLoader.load(climate_dir)
+
+    # Split climate_ds into train & test
+    climate_train_ds, climate_test_ds = train_test_split(
+        climate_ds, 
+        test_size=200, 
+        random_state=392, 
+        stratify=[d['label'] for d in climate_ds]
+    )
+    climate_train_ds, climate_dev_ds = train_test_split(
+        climate_train_ds, 
+        test_size=200, 
+        random_state=392, 
+        stratify=[d['label'] for d in climate_train_ds]
+    )
+
+    #===================================================
+    # Setup huggingface dataset objects
+    #===================================================
+    features = Features({
+        "claim": Value("string"), 
+        "evidence": Value("string"),
+        "label": ClassLabel(num_classes=3, names=["SUPPORTS", "REFUTES", "NOT ENOUGH INFO"])
+    })
+    
+    # train on fever 
+    ds1 = DatasetDict()
+    ds1['train'] = Dataset.from_list(fever_train_ds, features=features)
+    ds1['validation'] = Dataset.from_list(fever_dev_ds, features=features)
+    ds1['fever_test'] = Dataset.from_list(fever_test_ds, features=features)
+    ds1['pubhealth_test'] = Dataset.from_list(pubhealth_test_ds, features=features)
+    ds1['climate_test']  = Dataset.from_list(climate_test_ds, features=features)
+
+    # train on pubhealth
+    ds2 = DatasetDict()
+    ds2['train'] = Dataset.from_list(pubhealth_train_ds, features=features)
+    ds2['validation'] = Dataset.from_list(pubhealth_dev_ds, features=features)
+    ds2['fever_test'] = Dataset.from_list(fever_test_ds, features=features)
+    ds2['pubhealth_test'] = Dataset.from_list(pubhealth_test_ds, features=features)
+    ds2['climate_test']  = Dataset.from_list(climate_test_ds, features=features)
+
+    # train on climate
+    ds3 = DatasetDict()
+    ds3['train'] = Dataset.from_list(climate_train_ds, features=features)
+    ds3['validation'] = Dataset.from_list(climate_dev_ds, features=features)
+    ds3['fever_test'] = Dataset.from_list(fever_test_ds, features=features)
+    ds3['pubhealth_test'] = Dataset.from_list(pubhealth_test_ds, features=features)
+    ds3['climate_test']  = Dataset.from_list(climate_test_ds, features=features)
+
+    # test datasets
+    ds_test = DatasetDict()
+    ds_test['fever'] = Dataset.from_list(fever_test_ds, features=features)
+    ds_test['pubhealth'] = Dataset.from_list(pubhealth_test_ds, features=features)
+    ds_test['climate'] = Dataset.from_list(climate_test_ds, features=features)
+
+    return ds1, ds2, ds3, ds_test
+
 
         
         
