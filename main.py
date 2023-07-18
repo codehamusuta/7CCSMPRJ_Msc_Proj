@@ -11,6 +11,7 @@ def read_json(fp):
             data.append(json.loads(line.strip()))
         return data
 
+
 class FeverLoader:
     @staticmethod
     def process_fever(sample):
@@ -37,6 +38,7 @@ class FeverLoader:
         fever_train_ds = list(map(FeverLoader.process_fever, fever_train_ds))
     
         return fever_train_ds, fever_dev_ds, fever_test_ds
+
 
 class PubhealthLoader:
     @staticmethod
@@ -79,6 +81,7 @@ class PubhealthLoader:
     
         return pubhealth_train_ds, pubhealth_dev_ds, pubhealth_test_ds
 
+
 class ClimateFeverLoader:
     @staticmethod
     def process_climate(sample):
@@ -106,6 +109,7 @@ class ClimateFeverLoader:
         climate_ds = list(map(ClimateFeverLoader.process_climate, climate_ds))
 
         return climate_ds
+
 
 """
 Prepare dataset for experiments
