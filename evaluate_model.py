@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 import evaluate
 
-def _evaluate(model, ds, device, metric="accuracy"):
+def _evaluate(model, ds, device, metric=None):
     """
     Args:
         model (pytorch model): model to evaluate
@@ -12,7 +12,16 @@ def _evaluate(model, ds, device, metric="accuracy"):
         device (torch.device): GPU / CPU
         metric (string): evaluation metrics to use. Defaults to accuracy.
     """
-    metric = evaluate.load(metric)
+    if metric is None:
+        raise ValueError("Please include a metric to evaluate")
+        
+    if isinstance(metric, list):
+        metric = evaluate.combine(metric)
+    elif isinstance(metric, str):
+        metric = evaluate.load(metric)
+    else:
+        raise ValueError("Metric is of invalid type")
+
     model.eval()
     for batch in ds:
         batch = {k: v.to(device) for k,v in batch.items()}
@@ -25,7 +34,7 @@ def _evaluate(model, ds, device, metric="accuracy"):
 
     return metric.compute()
 
-def evaluate_model(model_checkpoint, ds_test, metric="accuracy"):
+def evaluate_model(model_checkpoint, ds_test, metric=None, verbose=False):
     """Evaluate accuracy of saved model on test datasets
     
     Args:
@@ -65,12 +74,15 @@ def evaluate_model(model_checkpoint, ds_test, metric="accuracy"):
     #===================================================
     # Evaluate
     #===================================================    
+    results = dict()
     for ds_name in encoded_ds.keys():
         print(f"Evaluating {ds_name}")
         eval_ds = DataLoader(encoded_ds[ds_name], batch_size=8)
         r = _evaluate(model, eval_ds, device, metric)
-        print(f"{ds_name} :: {r}")
-
-    return None
+        if verbose:
+            print(f"{ds_name} :: {r}")
+        results[ds_name] = r
+        
+    return results
         
     

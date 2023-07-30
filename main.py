@@ -4,6 +4,8 @@ ETL functions
 import json
 import os
 
+from sklearn.model_selection import train_test_split
+
 def read_json(fp):
     with open(fp, "r", encoding="utf-8") as f:
         data = []
@@ -82,7 +84,7 @@ class PubhealthLoader:
         return pubhealth_train_ds, pubhealth_dev_ds, pubhealth_test_ds
 
 
-class ClimateFeverLoader:
+class ClimateFeverLoader:    
     @staticmethod
     def process_climate(sample):
         obj = {}
@@ -100,7 +102,25 @@ class ClimateFeverLoader:
         return obj
 
     @staticmethod
-    def load(fp):
+    def split_dataset(climate_ds, dev_size=200, test_size=200, random_state = 392):
+        # Split climate_ds into train & test
+        climate_train_ds, climate_test_ds = train_test_split(
+            climate_ds, 
+            test_size = test_size, 
+            random_state = random_state, 
+            stratify=[d['label'] for d in climate_ds]
+        )
+        climate_train_ds, climate_dev_ds = train_test_split(
+            climate_train_ds, 
+            test_size = dev_size, 
+            random_state = random_state, 
+            stratify=[d['label'] for d in climate_train_ds]
+        )
+
+        return climate_train_ds, climate_dev_ds, climate_test_ds
+    
+    @staticmethod
+    def load(fp, split_params):
         """
         Args:
             fp (string): folder path with preprocessed fever data
@@ -108,16 +128,28 @@ class ClimateFeverLoader:
         climate_ds = read_json(os.path.join(fp, 'climate-fever.jsonl'))
         climate_ds = list(map(ClimateFeverLoader.process_climate, climate_ds))
 
-        return climate_ds
+        return ClimateFeverLoader.split_dataset(climate_ds, **split_params)
 
 
 """
 Prepare dataset for experiments
 """
 from datasets import Dataset, DatasetDict, ClassLabel, Value, Features
-from sklearn.model_selection import train_test_split
 
-def load_datasets(fever_dir, pubhealth_dir, climate_dir):
+def load_datasets(fever_dir, pubhealth_dir, climate_dir, climate_params=None):
+    
+    # Default parameters for climate fever split
+    climate_params = climate_params or {
+        'dev_size': 200,
+        'test_size': 200,
+        'random_state': 392
+    }
+    # climate_params = {
+    #     'dev_size': 150,
+    #     'test_size': 150,
+    #     'random_state': 41
+    # }
+    
     """
     Load and prepare datasets for experiments
     """
@@ -126,21 +158,7 @@ def load_datasets(fever_dir, pubhealth_dir, climate_dir):
     #===================================================
     fever_train_ds, fever_dev_ds, fever_test_ds = FeverLoader.load(fever_dir)
     pubhealth_train_ds, pubhealth_dev_ds, pubhealth_test_ds = PubhealthLoader.load(pubhealth_dir)
-    climate_ds = ClimateFeverLoader.load(climate_dir)
-
-    # Split climate_ds into train & test
-    climate_train_ds, climate_test_ds = train_test_split(
-        climate_ds, 
-        test_size=200, 
-        random_state=392, 
-        stratify=[d['label'] for d in climate_ds]
-    )
-    climate_train_ds, climate_dev_ds = train_test_split(
-        climate_train_ds, 
-        test_size=200, 
-        random_state=392, 
-        stratify=[d['label'] for d in climate_train_ds]
-    )
+    climate_train_ds, climate_dev_ds, climate_test_ds = ClimateFeverLoader.load(climate_dir, climate_params)
 
     #===================================================
     # Setup huggingface dataset objects
