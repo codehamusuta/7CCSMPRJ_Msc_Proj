@@ -55,6 +55,7 @@ def get_predictions(model_checkpoint, ds_test, debug=False):
     Returns:
         dict(pd.DataFrame): return dictionary of dataframes with predictions for each test dataset
     """    
+    torch.cuda.empty_cache()
     #===================================================
     # Load Model
     #===================================================
@@ -149,5 +150,6 @@ if __name__ == "__main__":
 
     results_df = pd.concat(results_df)
 
-    results_df.to_picke(output_fp)
+    results_df.to_pickle(output_fp)
     print(f"Predictions saved to {output_fp}")
+    print("Done")
