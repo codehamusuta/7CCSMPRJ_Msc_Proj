@@ -23,15 +23,14 @@ def read_json(fp):
             data.append(json.loads(line.strip()))
         return data
 
-def load_data(data_dir, ds_name):
-    if ds_name not in ["fever", "pubhealth", "climate"]:
-        raise ValueError("Unrecognised dataset name")
-    
-    train_ds = read_json(os.path.join(data_dir, f'{ds_name}_train.jsonl'))
-    dev_ds = read_json(os.path.join(data_dir, f'{ds_name}_dev.jsonl'))
-    test_ds = read_json(os.path.join(data_dir, f'{ds_name}_test.jsonl'))
 
-    return train_ds, dev_ds, test_ds
+def get_fps(data_dir, ds_name):
+    train_fp = os.path.join(data_dir, f'{ds_name}_train.jsonl')
+    dev_fp = os.path.join(data_dir, f'{ds_name}_dev.jsonl')
+    test_fp = os.path.join(data_dir, f'{ds_name}_test.jsonl')
+
+    return train_fp, dev_fp, test_fp
+
     
 def load_datasets(data_dir):
     """load processed data into HuggingFace dataset objects 
@@ -40,9 +39,9 @@ def load_datasets(data_dir):
         data_dir (str): folder path to processed data
     """    
 
-    fever_train_ds, fever_dev_ds, fever_test_ds = load_data(data_dir, "fever")
-    pubhealth_train_ds, pubhealth_dev_ds, pubhealth_test_ds = load_data(data_dir, "pubhealth")
-    climate_train_ds, climate_dev_ds, climate_test_ds = load_data(data_dir, "climate")
+    fever_train_fp, fever_dev_fp, fever_test_fp = get_fps(data_dir, "fever")
+    pubhealth_train_fp, pubhealth_dev_fp, pubhealth_test_fp = get_fps(data_dir, "pubhealth")
+    climate_train_fp, climate_dev_fp, climate_test_fp = get_fps(data_dir, "climate")
     
     #===================================================
     # Setup huggingface dataset objects
@@ -55,24 +54,24 @@ def load_datasets(data_dir):
 
     #for fine-tuning on FEVER
     ds_fever = DatasetDict()
-    ds_fever['train'] = Dataset.from_list(fever_train_ds, features=features)
-    ds_fever['validation'] = Dataset.from_list(fever_dev_ds, features=features)
+    ds_fever['train'] = Dataset.from_json(fever_train_fp, features=features)
+    ds_fever['validation'] = Dataset.from_json(fever_dev_fp, features=features)
 
     #for fine-tuning on PUBHEALTH
     ds_pubhealth = DatasetDict()
-    ds_pubhealth['train'] = Dataset.from_list(pubhealth_train_ds, features=features)
-    ds_pubhealth['validation'] = Dataset.from_list(pubhealth_dev_ds, features=features)
+    ds_pubhealth['train'] = Dataset.from_json(pubhealth_train_fp, features=features)
+    ds_pubhealth['validation'] = Dataset.from_json(pubhealth_dev_fp, features=features)
 
     #for fine-tuning on CLIMATE
     ds_climate = DatasetDict()
-    ds_climate['train'] = Dataset.from_list(climate_train_ds, features=features)
-    ds_climate['validation'] = Dataset.from_list(climate_dev_ds, features=features)
+    ds_climate['train'] = Dataset.from_json(climate_train_fp, features=features)
+    ds_climate['validation'] = Dataset.from_json(climate_dev_fp, features=features)
 
     #for evaluation 
     ds_test = DatasetDict()
-    ds_test['fever'] = Dataset.from_list(fever_test_ds, features=features)
-    ds_test['pubhealth'] = Dataset.from_list(pubhealth_test_ds, features=features)
-    ds_test['climate'] = Dataset.from_list(climate_test_ds, features=features)
+    ds_test['fever'] = Dataset.from_json(fever_test_fp, features=features)
+    ds_test['pubhealth'] = Dataset.from_json(pubhealth_test_fp, features=features)
+    ds_test['climate'] = Dataset.from_json(climate_test_fp, features=features)
 
     # return ds_fever, ds_pubhealth, ds_climate, ds_test
     return {
