@@ -1,0 +1,15 @@
+pretrained_models: # Huggingface pretrained model path
+  BERT: "bert-base-uncased"
+  RoBERTa: "roberta-base"
+  ALBERT: "albert-base-v1"
+  SciBERT: "allenai/scibert_scivocab_uncased"
+  BioBERT: "dmis-lab/biobert-base-cased-v1.2"
+
+processed_data_dir: '../data_2023_06_02/processed_data'
+training:
+  experiment_type: "normal_loss"  # normal_loss / weighted_loss
+  models_dir: "../models/v3/"      # directory to save best models
+
+evaluation:
+  models_dir: "../models/v3/"      # directory to evaluate models from
+  predictions_fp: "./outputs/predictions_v1.pkl" 
