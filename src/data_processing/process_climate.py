@@ -29,7 +29,7 @@ def standardize_labels(sample):
 def extract_evidence(sample):
     evidences = sample["evidences"]
 
-    # concatenate evidence 
+    # concatenate evidences into a single text 
     sample["evidences"] = " ".join([e["evidence"] for e in evidences]) #evidences is a list of dictionary 
     return sample
 
@@ -97,6 +97,6 @@ def process_climate():
     save_processed_data(train, dev, test, processsed_data_dir, 'climate')
     
 
-
 if __name__ == "__main__":
     process_climate()
+    print("Done")
