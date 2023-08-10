@@ -18,7 +18,7 @@ import evaluate
 import numpy as np
 import pandas as pd
 
-from .finetuning import tokenize_data
+from experiments.finetuning import tokenize_data
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -103,14 +103,14 @@ def get_predictions(model_checkpoint, ds_test, debug=False):
 if __name__ == "__main__":
     import os
 
-    from .dataloader import load_datasets
-    from .utils import load_config
-    from .finetuning import MODELS, DATASETS
+    from experiments.dataloader import load_datasets
+    from experiments.utils import load_config
+    from experiments.finetuning import MODELS, DATASETS
     
     config = load_config()
 
     processed_data_dir = config["processed_data_dir"]
-    models_dir = config["evaluatioin"]["models_dir"]
+    models_dir = config["evaluation"]["models_dir"]
     output_fp = config["evaluation"]["predictions_fp"]
 
     experiments = [

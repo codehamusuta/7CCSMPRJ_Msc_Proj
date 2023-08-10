@@ -6,16 +6,16 @@ pretrained_models: # Huggingface pretrained model path
   BioBERT: "dmis-lab/biobert-base-cased-v1.2"
 
 raw_data_dirs:
-  fever: '../data_2023_06_02/raw/FEVER'
-  pubhealth: '../data_2023_06_02/raw/PUBHEALTH'
-  climate: '../data_2023_06_02/raw/CLIMATE'  
+  fever: '../../data_2023_06_02/raw/FEVER'
+  pubhealth: '../../data_2023_06_02/raw/PUBHEALTH'
+  climate: '../../data_2023_06_02/raw/CLIMATE'  
 
-processed_data_dir: '../data_2023_06_02/processed_data'
+processed_data_dir: '../../data_2023_06_02/processed_data'
 
 training:
   experiment_type: "normal_loss"  # normal_loss / weighted_loss
-  models_dir: "../models/v3/"      # directory to save best models
+  models_dir: "../../models/v3/"      # directory to save best models
 
 evaluation:
-  models_dir: "../models/v3/"      # directory to evaluate models from
-  predictions_fp: "./outputs/predictions_v1.pkl" 
+  models_dir: "../../models/v3/"      # directory to evaluate models from
+  predictions_fp: "../outputs/predictions_test.pkl" 
