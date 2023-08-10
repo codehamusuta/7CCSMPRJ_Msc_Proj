@@ -5,7 +5,13 @@ pretrained_models: # Huggingface pretrained model path
   SciBERT: "allenai/scibert_scivocab_uncased"
   BioBERT: "dmis-lab/biobert-base-cased-v1.2"
 
+raw_data_dirs:
+  fever: '../data_2023_06_02/raw/FEVER'
+  pubhealth: '../data_2023_06_02/raw/PUBHEALTH'
+  climate: '../data_2023_06_02/raw/CLIMATE'  
+
 processed_data_dir: '../data_2023_06_02/processed_data'
+
 training:
   experiment_type: "normal_loss"  # normal_loss / weighted_loss
   models_dir: "../models/v3/"      # directory to save best models
