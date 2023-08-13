@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+# -----------------------
+# Author : Wen Ting, Choi
+# Date : 2023-08-09 
+# -----------------------
+
 import os
 import yaml
 import random

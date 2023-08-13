@@ -94,32 +94,6 @@ class DocDB():
         cursor.close()
         return results
 
-# def get_doc_line(db):
-#     def f(doc, line):
-#         lines = db.get_doc_lines(doc)
-#         if line > -1:
-#             return lines.split("\n")[line].split("\t")[1] #get specific line in wiki page
-#         else:
-#             non_empty_lines = [line.split("\t")[1] for line in lines.split("\n") if len(line.split("\t"))>1 and len(line.split("\t")[1].strip())]
-#             return non_empty_lines[SimpleRandom.get_instance().next_rand(0,len(non_empty_lines)-1)] #get random sent from doc
-#     return f
-
-# # CONTINUE HERE
-# def extract_evidence(evidence, db):
-#     extract_evidence_text = get_doc_line(db) #this is a function
-#     try:
-#         pages = []
-#         for evidence_group in evidence:
-#             pages.extend([(ev[2],ev[3]) for ev in evidence_group])
-        
-#         lines = list(set([extract_evidence_text(d[0],d[1]) for d in pages]))
-#         # premise = " ".join(lines) # do joining in later step
-#         return lines
-#     except Exception as e:
-#         print(evidence)
-#         print(e)
-#         raise
-
 class EvidenceExtractor:
     """Extract evidence from wikipedia db
     """    
@@ -167,7 +141,7 @@ def standardize_fieldnames(df):
 def save_processed_data(train_df, dev_df, test_df, output_dir):
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
-        
+
     train_df.to_json(
         os.path.join(output_dir, "fever_train.jsonl"),
         orient="records"
