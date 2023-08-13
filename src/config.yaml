@@ -14,8 +14,8 @@ processed_data_dir: '../../data_2023_06_02/processed_data'
 
 training:
   experiment_type: "normal_loss"  # normal_loss / weighted_loss
-  models_dir: "../../models/v3/"      # directory to save best models
+  models_dir: "../../models/normal_loss/"      # directory to save best models
 
 evaluation:
-  models_dir: "../../models/v3/"      # directory to evaluate models from
-  predictions_fp: "../outputs/predictions_test.pkl" 
+  models_dir: "../../models/normal_loss/"      # directory to evaluate models from
+  predictions_fp: "../outputs/predictions_normal_loss.pkl" 
