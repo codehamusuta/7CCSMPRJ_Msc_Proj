@@ -44,7 +44,11 @@ def standardize_labels(df):
     return _df
     
 def select_evidence_sentences(df, k=5):
-    """select top k evidence sentences based on sentence transformer model"""
+    """select top k evidence sentences based on sentence transformer model
+    
+    Adapted from https://github.com/neemakot/Health-Fact-Checking/blob/master/src/load_data.py 
+    Note that in the original code, there is a bug in line 83 which is fixed here.
+    """
     corpus = df.copy()
     model = SentenceTransformer('bert-base-nli-mean-tokens')
     model.to("cuda")
