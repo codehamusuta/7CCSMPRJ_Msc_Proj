@@ -37,6 +37,11 @@ class DocDB():
     """Sqlite interactor. Use to interact with wikidb from fever.
 
     Implements get_doc_text(doc_id).
+
+    Note:
+        Adapted from https://github.com/facebookresearch/DrQA/blob/main/drqa/retriever/doc_db.py &
+        https://github.com/sheffieldnlp/naacl2018-fever/blob/master/src/retrieval/fever_doc_db.py 
+    
     """
     def __init__(self, db_path):
         self.path = db_path 
