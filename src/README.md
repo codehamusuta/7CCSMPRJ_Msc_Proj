@@ -20,6 +20,9 @@ Wen Ting, Choi
 - experiments/finetuning.py
 - experiments/utils.py
 - config.yaml
+- results_analysis/label_analysis.py
+- results_analysis/overall_analysis.py
+- results_analysis/results_analysis.ipynb
 
 ## Instructions
 
@@ -46,3 +49,4 @@ Wen Ting, Choi
     #configure config.yaml to the correct folders and settings
     python3 -m experiments.evaluate
     ```
+5. Analyse results in `results_analysis/results_analysis.ipynb`
